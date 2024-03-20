@@ -2,28 +2,44 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+    font-family: 'junction';
+    font-style: regular;
+    font-weight: 400;
+    src: url('/fonts/Junction-Regular.woff2') format('woff2');
+}
+@font-face {
+    font-family: 'junction';
+    font-style: bold;
+    font-weight: 700;
+    src: url('/fonts/Junction-Bold.woff2') format('woff2');
+}
+
 :root {
   --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
+  --background-start-rgb: 230, 255, 255;
   --background-end-rgb: 255, 255, 255;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+body {
+    color: rgb(var(--foreground-rgb));
+    background: radial-gradient(circle farthest-side at top right, rgb(var(--background-start-rgb)) 0%, rgb(var(--background-end-rgb)) 100%);
+}
+.switch-input:checked {
+    background-color: #3d5354;
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+.switch-input:checked ~ span:last-child {
+    --tw-translate-x: 1.75rem; /* translate-x-7 */
+}
+header {
+    min-height: 10vh;
+}
+main {
+    min-height: 80vh;
+}
+footer {
+    min-height: 10vh;
 }
 
 @layer utilities {
