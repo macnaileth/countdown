@@ -10,12 +10,13 @@ const style = {
     }    
 };
 
-export const ClockIcon = ({ className, dimensions = { width: '20px', height: '20px' } }) => {  
+export const ClockIcon = ({ className, dimensions = { width: '20px', height: '20px' }, rotate = false }) => {  
     return (
         <svg className={ className ? className : '' } width={ dimensions.width } height={ dimensions.height } viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <g>
                 <circle cx="12" cy="12" r="9" stroke="#292929" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
                 <path d="M11 8V13H16" stroke="#292929" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                { rotate === true && <animateTransform attributeType="xml" attributeName="transform" type="rotate" from="360 12 12" to="0 12 12" dur="1s" additive="sum" repeatCount="indefinite" /> }
             </g>
         </svg>
     );   

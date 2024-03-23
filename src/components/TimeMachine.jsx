@@ -1,10 +1,13 @@
 'use client';
 
-import { useState, useEffect, useMemo, Fragment } from 'react';
+import { useState, useEffect, useMemo, Fragment, useContext } from 'react';
 import { add, sub, isEqual, getYear, getMonth, getDay, getHours, getMinutes, getDate, setMinutes, setHours } from "date-fns";
 
 import { fullformattedDate } from '../lib/datetimehelpers';
 import { ClockIcon } from '../components/Icons';
+import { resolveLangStr } from '../lib/handleLanguage';
+
+import { LanguageContext, LanguageData } from './TimerWrapUp';
 
 const SECOND = 1000;
 const MINUTE = SECOND * 60;
@@ -13,7 +16,7 @@ const DAY = HOUR * 24;
 
 const initalDeadline = add( Date.now(), { days: 1, hours: 1, minutes: 10 });
 
-const Timer = ({ deadline = new Date().toString(), run = true, timeupHandler }) => {
+const Timer = ({ deadline = new Date().toString(), run = true, timeupHandler, language }) => {
     
     const parsedDeadline = useMemo(() => Date.parse(deadline), [deadline]);
     const [time, setTime] = useState(parsedDeadline - Date.now());
@@ -57,7 +60,7 @@ const Timer = ({ deadline = new Date().toString(), run = true, timeupHandler }) 
                                         { Math.floor(value) > 0 &&
                                             <div key={label} className="digit-box">
                                                 <div className="digit text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-bold">{`${Math.floor(value)}`.padStart(2, "0")}</div>
-                                                <div className="digitl-label text-center text-xs md:text-sm lg:text-base">{label}</div>
+                                                <div className="digitl-label text-center text-xs md:text-sm lg:text-base">{ resolveLangStr( label, language.data, language.lang ) }</div>
                                             </div>
                                         }
                                     </Fragment>
@@ -69,9 +72,14 @@ const Timer = ({ deadline = new Date().toString(), run = true, timeupHandler }) 
 
 export const TimeMachine = () => {
     
+    const language = useContext( LanguageContext );  
+    const langJSON = useContext( LanguageData );
+    
     const [run, setRun] = useState( false ); //stopper
     const [deadline, setDeadline ] = useState();
     const [advanced, setAdvanced] = useState( false ); //use advanced setup
+    
+    console.log( 'lang:', language );
     
     useEffect( () => { setDeadline( initalDeadline ); }, [] );    
     
@@ -110,7 +118,20 @@ export const TimeMachine = () => {
     
     const AdvancedSetup = () => {
         
-        const months = { 0: 'Jan', 1: 'Feb', 2: 'Mar', 3: 'April', 4: 'Mai', 5: 'Jun', 6: 'Jul', 7: 'Aug', 8: 'Sep', 9: 'Okt', 10: 'Nov', 11: 'Dez' };
+        const months = { 
+            0: resolveLangStr( 'Jan', langJSON, language.language ), 
+            1: resolveLangStr( 'Feb', langJSON, language.language ), 
+            2: resolveLangStr( 'Mar', langJSON, language.language ), 
+            3: resolveLangStr( 'April', langJSON, language.language ), 
+            4: resolveLangStr( 'Mai', langJSON, language.language ), 
+            5: resolveLangStr( 'Jun', langJSON, language.language ), 
+            6: resolveLangStr( 'Jul', langJSON, language.language ), 
+            7: resolveLangStr( 'Aug', langJSON, language.language ), 
+            8: resolveLangStr( 'Sep', langJSON, language.language ), 
+            9: resolveLangStr( 'Okt', langJSON, language.language ), 
+            10: resolveLangStr( 'Nov', langJSON, language.language ), 
+            11: resolveLangStr( 'Dez', langJSON, language.language ) 
+        };
         
         return (
                 <div id="advanced-setup" className="flex flex-col justify-left gap-2">
@@ -173,8 +194,8 @@ export const TimeMachine = () => {
                                 <TimeSetButton />
                             </div> 
                         }
-                        <div className="border-2 border-tdgreen-400 p-1 rounded">
-                            { fullformattedDate( deadline || '' ) }<ClockIcon className="inline pb-0.5"/>
+                        <div className={ "border-2 border-tdgreen-400 p-1 rounded" + ( run === true ? " animate-pulse" : "" ) }>
+                            { fullformattedDate( deadline || '' ) }<ClockIcon rotate={ run === true ? true : false } className="inline pb-0.5 " />
                         </div>
                         { run === false &&
                             <div className="fullsetup flex gap-2">
@@ -182,7 +203,7 @@ export const TimeMachine = () => {
                                     onClick={ () => setAdvanced(advanced === true ? false : true) }
                                         className="border-2 bg-tgreen border-tgreen p-1 rounded text-white">
                                         { advanced === true ? 
-                                            <span className="inline">x</span> :
+                                            <span className="inline">&#x2715;</span> :
                                             <>
                                                 <span className="inline">...</span>
                                             </>
@@ -192,13 +213,13 @@ export const TimeMachine = () => {
                         }                        
                         { advanced && <div className="mb-4 flex opacity-95 border-2 border-tdgreen-400 justify-end absolute mt-10 bg-white rounded p-2"><AdvancedSetup /></div> }
                     </div> 
-                    { run ? <Timer deadline={ deadline || initalDeadline } run={ run } timeupHandler={ timeUp } /> : 
-                            <div className="digit text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-bold text-center">timer stopped</div> }
+                    { run ? <Timer deadline={ deadline || initalDeadline } run={ run } timeupHandler={ timeUp } language={{ lang: language.language, data: langJSON }} /> : 
+                            <div className="digit text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-bold text-center mt-2">{ resolveLangStr( 'stopped', langJSON, language.language ) }</div> }
                     <div className="self-center mt-2">
                         <button 
                             className="mt-2 border bg-tdgreen-400 border-tdgreen-400 text-white pb-2 pt-3 ps-3 pe-3 rounded hover:bg-tdgreen-300 hover:border-tdgreen-300"
                             onClick={ () => ( setRun(run ? false : true), setAdvanced( false ) ) } >
-                            { !run ? 'Start' : 'Stop' }
+                            { !run ? resolveLangStr( 'start', langJSON, language.language ) : resolveLangStr( 'stop', langJSON, language.language ) }
                         </button>
                     </div>
                 </div>

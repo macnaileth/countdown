@@ -1,5 +1,5 @@
-import GlobalHeader from "../components/GlobalHeader";
-import GlobalFooter from "../components/GlobalFooter";
+import TimerWrapUp from "../components/TimerWrapUp";
+
 import "./globals.css";
 
 export const metadata = {
@@ -11,9 +11,8 @@ export default function RootLayout({ children }) {
   return (
     <html lang="de">
         <body className="font-junction">
-            <GlobalHeader />
-            {children}
-            <GlobalFooter />
+            <link rel="icon" href="/favicons/favicon.ico" sizes="any" />
+            <TimerWrapUp>{ children }</TimerWrapUp>
         </body>
     </html>
   );
