@@ -4,8 +4,9 @@ import { useState, useEffect, useMemo, Fragment, useContext } from 'react';
 import { add, sub, isEqual, getYear, getMonth, getDay, getHours, getMinutes, getDate, setMinutes, setHours } from "date-fns";
 
 import { fullformattedDate } from '../lib/datetimehelpers';
-import { ClockIcon } from '../components/Icons';
+import { ClockIcon, Share } from '../components/Icons';
 import { resolveLangStr } from '../lib/handleLanguage';
+import { ShareModal } from './Modals';
 
 import { LanguageContext, LanguageData } from './TimerWrapUp';
 
@@ -78,10 +79,13 @@ export const TimeMachine = () => {
     const [run, setRun] = useState( false ); //stopper
     const [deadline, setDeadline ] = useState();
     const [advanced, setAdvanced] = useState( false ); //use advanced setup
+    const [ status, setStatus ] = useState( 'closed' ); //modal
     
     console.log( 'lang:', language );
     
     useEffect( () => { setDeadline( initalDeadline ); }, [] );    
+    
+    const closeHandler = () => setStatus( 'closed' );
     
     const timeUp = ( timer ) => {
         if ( timer.d <= 0 && timer.h <= 0 && timer.m <= 0 && timer.s <= 0 ) {
@@ -194,14 +198,14 @@ export const TimeMachine = () => {
                                 <TimeSetButton />
                             </div> 
                         }
-                        <div className={ "border-2 border-tdgreen-400 p-1 rounded" + ( run === true ? " animate-pulse" : "" ) }>
+                        <div className="border-2 border-tdgreen-400 p-1 rounded">
                             { fullformattedDate( deadline || '' ) }<ClockIcon rotate={ run === true ? true : false } className="inline pb-0.5 " />
                         </div>
                         { run === false &&
                             <div className="fullsetup flex gap-2">
                                 <button 
                                     onClick={ () => setAdvanced(advanced === true ? false : true) }
-                                        className="border-2 bg-tgreen border-tgreen p-1 rounded text-white">
+                                        className="border-2 bg-tgreen border-tgreen p-1 rounded text-white rounded hover:bg-tdgreen-300 hover:border-tdgreen-300">
                                         { advanced === true ? 
                                             <span className="inline">&#x2715;</span> :
                                             <>
@@ -215,14 +219,29 @@ export const TimeMachine = () => {
                     </div> 
                     { run ? <Timer deadline={ deadline || initalDeadline } run={ run } timeupHandler={ timeUp } language={{ lang: language.language, data: langJSON }} /> : 
                             <div className="digit text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-bold text-center mt-2">{ resolveLangStr( 'stopped', langJSON, language.language ) }</div> }
-                    <div className="self-center mt-2">
+                    <div className="self-center flex gap-2 mt-2">
                         <button 
                             className="mt-2 border bg-tdgreen-400 border-tdgreen-400 text-white pb-2 pt-3 ps-3 pe-3 rounded hover:bg-tdgreen-300 hover:border-tdgreen-300"
                             onClick={ () => ( setRun(run ? false : true), setAdvanced( false ) ) } >
                             { !run ? resolveLangStr( 'start', langJSON, language.language ) : resolveLangStr( 'stop', langJSON, language.language ) }
                         </button>
+                        { run === false && 
+                            <>
+                                <button 
+                                    onClick={ () => setStatus( 'open' ) }
+                                    className="mt-2 border bg-tgreen border-tgreen text-white pb-2 pt-2 ps-3 pe-3 rounded hover:bg-tdgreen-300 hover:border-tdgreen-300">
+                                    <Share className="fill-white"/>
+                                </button>   
+                            </>
+                        }
                     </div>
                 </div>
+                <ShareModal 
+                    status={ status } 
+                    lang={{ set: language.language, data: langJSON }} 
+                    handler={ closeHandler } 
+                    sharetimer={ deadline || initalDeadline } 
+                />
             </>
     );
 };

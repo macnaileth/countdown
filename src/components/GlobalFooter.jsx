@@ -3,7 +3,7 @@
 import { useState, useContext } from 'react';
 
 import { GitHubIcon, QuickRef } from './Icons';
-import InfoModal from './InfoModal';
+import { InfoModal } from './Modals';
 import { LanguageContext, LanguageData } from './TimerWrapUp';
 import { resolveLangStr } from '../lib/handleLanguage';
 

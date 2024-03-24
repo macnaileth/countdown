@@ -26,5 +26,7 @@
     "basedon": { "de": "Basierend auf dem Ansatz von", "en": "Based on the approach of" },
     "matomonocookies": { "de": "Nutzt Matomo. Keine Cookies werden gesetzt.", "en": "Uses Matomo. No cookies applied." },
     "info": { "de": "Rechtliche Infos und mehr", "en": "Legal info and more" },
-    "kofi": { "de": "Dir gefällt das hier? Spendier' mir einen Kaffee", "en": "Like it? Get me a coffee" }
+    "kofi": { "de": "Dir gefällt das hier? Spendier' mir einen Kaffee", "en": "Like it? Get me a coffee" },
+    "share": { "de": "teilen", "en": "share" },
+    "shareinfo": { "de": "Link zum teilen und einbetten", "en": "Link to share and embed" }
 }

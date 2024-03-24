@@ -33,7 +33,7 @@ body {
     --tw-translate-x: 1.75rem; /* translate-x-7 */
 }
 .modalbox {
-    width: 50%;
+    width: 90%;
 }
 header {
     min-height: 10vh;
@@ -45,8 +45,19 @@ footer {
     min-height: 10vh;
 }
 
+@media (min-width: 640px) {
+    .modalbox {
+        width: 70%;
+    }
+}
+
+@media (min-width: 1024px) {
+    .modalbox {
+        width: 50%;
+    }
+}
 @layer utilities {
-  .text-balance {
+    .text-balance {
     text-wrap: balance;
-  }
+    }
 }
