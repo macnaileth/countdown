@@ -1,4 +1,6 @@
-import { useState } from 'react';
+'use client';
+
+import { useState, useEffect } from 'react';
 import Link from 'next/link'; 
 import { usePathname } from 'next/navigation'
 const { formatISO } = require("date-fns");
@@ -53,8 +55,10 @@ export const InfoModal = ({ status='closed', handler, lang }) => {
 export const ShareModal = ({ status='closed', handler, lang, sharetimer }) => {
     
     const pathname = usePathname();
-    const shareLink = window.location.origin + ( pathname === '/' ? '' : pathname ) + '?timer=' + formatISO( sharetimer );
+    const [ sharelink, setSharelink ] = useState( '' );
     const [ copied, setCopied ] = useState( false );
+    
+    useEffect ( () => setSharelink( window.location.origin + ( pathname === '/' ? '' : pathname ) + '?timer=' + formatISO( sharetimer ) ) );
     
     return (
                 <ModalWrapper status={ status } handler={ handler }> 
@@ -63,13 +67,13 @@ export const ShareModal = ({ status='closed', handler, lang, sharetimer }) => {
                     <div className="flex gap-1 w-full">
                         <div className="flex grow border-2 whitespace-nowrap overflow-hidden border-tdgreen-400">
                             <div className="grow ps-2 pt-2 pb-1 rounded whitespace-nowrap overflow-hidden text-ellipsis">
-                                { shareLink }
+                                { sharelink }
                             </div>
                             <div className={ "pt-2 pb-1 px-2 text-right bg-white transition-opacity duration-700 ease-in " + ( copied === true ? "opacity-100" : "opacity-0" ) }>&#10003;</div>
                         </div>
                         <div className="pt-2 pb-0">
                             <button onClick={ () => { 
-                                navigator.clipboard.writeText( shareLink )
+                                navigator.clipboard.writeText( sharelink )
                                         .then( setCopied( true ) )
                                         .then( setTimeout( () => { setCopied( false ); }, 1000 ) ); 
                                 } 
@@ -78,7 +82,7 @@ export const ShareModal = ({ status='closed', handler, lang, sharetimer }) => {
                             </button>
                         </div>
                         <div className="pt-2 pb-0">
-                            <a href={ shareLink } target="_blank" rel="noopener noreferrer">
+                            <a href={ sharelink } target="_blank" rel="noopener noreferrer">
                                 <OpenBrowser className="fill-tdgreen-400 hover:fill-tdgreen-300 transition-color duration-500"/>
                             </a>
                         </div>                        
