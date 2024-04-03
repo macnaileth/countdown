@@ -23,7 +23,6 @@ const TimerWrapUp = ({ children }) => {
     
     
     console.log( 'timer value: ' + paramTimer + ', lang value: ' +  paramLang );
-
     console.log( 'parent lang: ', language );
     
     return  (
