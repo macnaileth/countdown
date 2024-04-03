@@ -58,7 +58,7 @@ export const ShareModal = ({ status='closed', handler, lang, sharetimer }) => {
     const [ sharelink, setSharelink ] = useState( '' );
     const [ copied, setCopied ] = useState( false );
     
-    useEffect ( () => setSharelink( window.location.origin + ( pathname === '/' ? '' : pathname ) + '?timer=' + formatISO( sharetimer ) ) );
+    useEffect ( () => setSharelink( window.location.origin + ( pathname === '/' ? '' : pathname ) + '?timer=' + formatISO( sharetimer ) + '&lang=' + lang.set ) );
     
     return (
                 <ModalWrapper status={ status } handler={ handler }> 

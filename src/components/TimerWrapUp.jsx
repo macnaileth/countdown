@@ -1,6 +1,7 @@
 'use client';
 
 import { createContext, useContext, useState } from 'react';
+import { useSearchParams } from 'next/navigation'
 
 import GlobalHeader from "../components/GlobalHeader";
 import GlobalFooter from "../components/GlobalFooter";
@@ -12,17 +13,25 @@ export const LanguageData = createContext( langData );
 
 const TimerWrapUp = ({ children }) => {
     
-    const [ language, setLanguage ] = useState( 'de' );
+    const searchParams = useSearchParams();
+    const paramTimer = searchParams.get( 'timer' );
+    const paramLang = searchParams.get( 'lang' );
+    
+    const [ language, setLanguage ] = useState( 
+            paramLang === null ? 'de' : langData.langs.includes( paramLang ) ? paramLang : 'de' );
     const value = { language, setLanguage };
     
+    
+    console.log( 'timer value: ' + paramTimer + ', lang value: ' +  paramLang );
+
     console.log( 'parent lang: ', language );
     
     return  (
                 <>
                     <LanguageContext.Provider value={ value }>
-                        <GlobalHeader value={ value } />
+                        <GlobalHeader value={ value } mode={ paramTimer ? 'reduced' : 'full' } />
                             { children }
-                        <GlobalFooter value={ value } /> 
+                        <GlobalFooter value={ value } mode={ paramTimer ? 'reduced' : 'full' } /> 
                     </LanguageContext.Provider >
                 </>
             );

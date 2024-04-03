@@ -1,4 +1,5 @@
 {
+    "langs": [ "de", "en" ],
     "stopped": { "de": "angehalten", "en": "stopped" },
     "Days": { "de": "Tage", "en": "days" }, 
     "Hours": { "de": "Stunden", "en": "hours" },

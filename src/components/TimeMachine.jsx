@@ -77,7 +77,7 @@ export const TimeMachine = () => {
     const langJSON = useContext( LanguageData );
     
     const [run, setRun] = useState( false ); //stopper
-    const [deadline, setDeadline ] = useState();
+    const [deadline, setDeadline ] = useState(); //deadline
     const [advanced, setAdvanced] = useState( false ); //use advanced setup
     const [ status, setStatus ] = useState( 'closed' ); //modal
     

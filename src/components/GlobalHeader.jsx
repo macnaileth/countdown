@@ -22,12 +22,12 @@ const LanguageSwitch = () => {
   );    
 };
 
-export default function GlobalHeader() {
+export default function GlobalHeader({ mode = 'full' }) {
         
     return (
                 <header className="flex justify-between p-4 opacity-10 hover:opacity-100 transition-opacity duration-500">
-                    <div className="ps-1"><Logo size="small" width="120px"/></div>
-                    <div><LanguageSwitch /></div>
+                    <div className={ mode === 'full' ? 'ps-1' : 'ps-4' }><Logo size="small" width={ mode === 'full' ? '120px' : '80px' }/></div>
+                    { mode === 'full' ? <div><LanguageSwitch /></div> : '' }
                 </header>
         );
 }
