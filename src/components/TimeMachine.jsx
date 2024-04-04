@@ -31,7 +31,7 @@ const Timer = ({ deadline = new Date().toString(), run = true, timeupHandler, la
             m: Math.floor((time / MINUTE) % 60),
             s: Math.floor((time / SECOND) % 60)
         } ) ); 
-    } );
+    }, [stopped] );
         
     useEffect( () => {  
         
@@ -87,7 +87,7 @@ export const TimeMachine = () => {
     useEffect( () => { 
         setDeadline( timerSetup === null ? initalDeadline : timerSetup ); 
         setRun( timerSetup === null ? false : true );
-    }, [] ); 
+    }, [timerSetup] ); 
     
     const closeHandler = () => setStatus( 'closed' );
     

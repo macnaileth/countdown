@@ -1,3 +1,5 @@
+import {Suspense} from "react";
+
 import TimerWrapUp from "../components/TimerWrapUp";
 
 import "./globals.css";
@@ -12,7 +14,11 @@ export default function RootLayout({ children }) {
     <html lang="de">
         <body className="font-junction">
             <link rel="icon" href="/favicons/favicon.ico" sizes="any" />
-            <TimerWrapUp>{ children }</TimerWrapUp>
+            <Suspense fallback={<>Loading...</>}>
+                <TimerWrapUp>
+                    { children }
+                </TimerWrapUp>
+            </Suspense>
         </body>
     </html>
   );

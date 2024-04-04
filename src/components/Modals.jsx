@@ -36,7 +36,7 @@ export const InfoModal = ({ status='closed', handler, lang }) => {
                 <p>{ resolveLangStr('intro', lang.data, lang.set) }</p>
                 <p>
                     { resolveLangStr('builton', lang.data, lang.set) }&nbsp; 
-                    <a className={ linkCSS } href="https://nextjs.org/" target="_blank" rel="noreferrer noopener">next.js</a> //&nbsp;  
+                    <a className={ linkCSS } href="https://nextjs.org/" target="_blank" rel="noreferrer noopener">next.js</a> &nbsp;  
                     <a className={ linkCSS } href="https://date-fns.org/" target="_blank" rel="noreferrer noopener">date-fns</a>.</p>
                 <p>{ resolveLangStr('basedon', lang.data, lang.set) }&nbsp; 
                     <a className={ linkCSS } href="https://dev.to/yuridevat/how-to-create-a-timer-with-react-7b9" target="_blank" rel="noreferrer noopener">Luke Shiru</a>
@@ -59,7 +59,6 @@ export const ShareModal = ({ status='closed', handler, lang, sharetimer }) => {
     const [ sharelink, setSharelink ] = useState( '' );
     const [ copied, setCopied ] = useState( false );
     
-    //convert stuff until it fits for date sharing
     const dateObj = { 
         year: getYear( sharetimer ),
         month: getMonth( sharetimer ),
