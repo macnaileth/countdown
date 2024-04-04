@@ -31,7 +31,7 @@ const Timer = ({ deadline = new Date().toString(), run = true, timeupHandler, la
             m: Math.floor((time / MINUTE) % 60),
             s: Math.floor((time / SECOND) % 60)
         } ) ); 
-    }, [stopped] );
+    } );
         
     useEffect( () => {  
         
@@ -87,7 +87,7 @@ export const TimeMachine = () => {
     useEffect( () => { 
         setDeadline( timerSetup === null ? initalDeadline : timerSetup ); 
         setRun( timerSetup === null ? false : true );
-    }, [timerSetup] ); 
+    }, [] ); 
     
     const closeHandler = () => setStatus( 'closed' );
     
@@ -224,22 +224,22 @@ export const TimeMachine = () => {
                     { run ? <Timer deadline={ deadline || initalDeadline } run={ run } timeupHandler={ timeUp } language={{ lang: language.language, data: langJSON }} /> : 
                             <div className="digit text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-bold text-center mt-2">{ resolveLangStr( 'stopped', langJSON, language.language ) }</div> }
                     { timerSetup === null &&
-                        <div className="self-center flex gap-2 mt-2">
-                            <button 
-                                className="mt-2 border bg-tdgreen-400 border-tdgreen-400 text-white pb-2 pt-3 ps-3 pe-3 rounded hover:bg-tdgreen-300 hover:border-tdgreen-300"
-                                onClick={ () => ( setRun(run ? false : true), setAdvanced( false ) ) } >
-                                    { !run ? resolveLangStr( 'start', langJSON, language.language ) : resolveLangStr( 'stop', langJSON, language.language ) }
-                            </button>
-                            { run === false &&
-                                <>
-                                    <button 
-                                        onClick={ () => setStatus( 'open' ) }
-                                        className="mt-2 border bg-tgreen border-tgreen text-white pb-2 pt-2 ps-3 pe-3 rounded hover:bg-tdgreen-300 hover:border-tdgreen-300">
-                                        <Share className="fill-white"/>
-                                    </button>   
-                                </>
-                            }
-                        </div>
+                    <div className="self-center flex gap-2 mt-2">
+                        <button 
+                            className="mt-2 border bg-tdgreen-400 border-tdgreen-400 text-white pb-2 pt-3 ps-3 pe-3 rounded hover:bg-tdgreen-300 hover:border-tdgreen-300"
+                            onClick={ () => ( setRun(run ? false : true), setAdvanced( false ) ) } >
+                                { !run ? resolveLangStr( 'start', langJSON, language.language ) : resolveLangStr( 'stop', langJSON, language.language ) }
+                        </button>
+                        { run === false &&
+                            <>
+                                <button 
+                                    onClick={ () => setStatus( 'open' ) }
+                                    className="mt-2 border bg-tgreen border-tgreen text-white pb-2 pt-2 ps-3 pe-3 rounded hover:bg-tdgreen-300 hover:border-tdgreen-300">
+                                    <Share className="fill-white"/>
+                                </button>   
+                            </>
+                        }
+                    </div>
                     }
                 </div>
                 { timerSetup === null &&
