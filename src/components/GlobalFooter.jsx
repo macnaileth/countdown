@@ -32,7 +32,12 @@ export default function GlobalFooter({ mode = 'full' }) {
                     }
                     <div className="flex gap-2">
                         <button className={ defButtonCSS } onClick={ () => setStatus( 'open' ) }><QuickRef className="fill-tdgreen-400 hover:fill-tdgreen-300 transition-color duration-500"/></button>
-                        { mode === 'full' && <button className={ defButtonCSS }><GitHubIcon className="fill-tdgreen-400 hover:fill-tdgreen-300 transition-color duration-500"/></button> }
+                        { mode === 'full' && 
+                        <div className={ defButtonCSS }>
+                            <a href="https://github.com/macnaileth/countdown" target="_blank" rel="noreferrer noopener">
+                                <GitHubIcon className="fill-tdgreen-400 hover:fill-tdgreen-300 transition-color duration-500"/>
+                            </a>
+                        </div> }
                     </div>
                 </footer>
             </>

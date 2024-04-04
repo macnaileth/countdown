@@ -10,6 +10,7 @@ import * as langData from '../data/langData.json';
 
 export const LanguageContext = createContext({ language: 'de', setLanguage: () => {} });
 export const LanguageData = createContext( langData );
+export const TimerSet = createContext( null );
 
 const TimerWrapUp = ({ children }) => {
     
@@ -28,9 +29,11 @@ const TimerWrapUp = ({ children }) => {
     return  (
                 <>
                     <LanguageContext.Provider value={ value }>
-                        <GlobalHeader value={ value } mode={ paramTimer ? 'reduced' : 'full' } />
-                            { children }
-                        <GlobalFooter value={ value } mode={ paramTimer ? 'reduced' : 'full' } /> 
+                        <TimerSet.Provider value={ paramTimer ? paramTimer : null }>
+                            <GlobalHeader value={ value } mode={ paramTimer ? 'reduced' : 'full' } />
+                                { children }
+                            <GlobalFooter value={ value } mode={ paramTimer ? 'reduced' : 'full' } /> 
+                        </TimerSet.Provider>
                     </LanguageContext.Provider >
                 </>
             );

@@ -2,10 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link'; 
-import { usePathname } from 'next/navigation'
-const { formatISO } = require("date-fns");
+import { usePathname } from 'next/navigation';
+import { formatISO, getMonth, getDate, getYear, getHours, getMinutes, getSeconds } from "date-fns";
 
 import { resolveLangStr } from '../lib/handleLanguage';
+import { fullformattedDate } from '../lib/datetimehelpers';
 import { Copy, OpenBrowser } from './Icons';
 
 const linkCSS = "border-b-2 border-signalred-300 hover:pb-0.5 hover:border-signalred-500 text-tdgrey hover:border-bottom transition-all duration-150";
@@ -58,7 +59,20 @@ export const ShareModal = ({ status='closed', handler, lang, sharetimer }) => {
     const [ sharelink, setSharelink ] = useState( '' );
     const [ copied, setCopied ] = useState( false );
     
-    useEffect ( () => setSharelink( window.location.origin + ( pathname === '/' ? '' : pathname ) + '?timer=' + formatISO( sharetimer ) + '&lang=' + lang.set ) );
+    //convert stuff until it fits for date sharing
+    const dateObj = { 
+        year: getYear( sharetimer ),
+        month: getMonth( sharetimer ),
+        day: getDate( sharetimer ),
+        hours: getHours( sharetimer ),
+        minutes: getMinutes( sharetimer ),
+        seconds: getSeconds( sharetimer )
+    };
+    const dateString = new Date( dateObj.year, dateObj.month, dateObj.day, dateObj.hours, dateObj.minutes, dateObj.seconds );
+    const ISOString = formatISO( dateString );
+    const TZclearedISO = ISOString.substring( 0, ISOString.length - 6 );
+    
+    useEffect ( () => setSharelink( window.location.origin + ( pathname === '/' ? '' : pathname ) + '?timer=' + TZclearedISO + '&lang=' + lang.set ) );
     
     return (
                 <ModalWrapper status={ status } handler={ handler }> 

@@ -1,14 +1,14 @@
 'use client';
 
 import { useState, useEffect, useMemo, Fragment, useContext } from 'react';
-import { add, sub, isEqual, getYear, getMonth, getDay, getHours, getMinutes, getDate, setMinutes, setHours } from "date-fns";
+import { add, sub, isEqual, getYear, getMonth, getDay, getHours, getMinutes, getDate, setMinutes, setHours, format, parseISO } from "date-fns";
 
 import { fullformattedDate } from '../lib/datetimehelpers';
 import { ClockIcon, Share } from '../components/Icons';
 import { resolveLangStr } from '../lib/handleLanguage';
 import { ShareModal } from './Modals';
 
-import { LanguageContext, LanguageData } from './TimerWrapUp';
+import { LanguageContext, LanguageData, TimerSet } from './TimerWrapUp'; //get context
 
 const SECOND = 1000;
 const MINUTE = SECOND * 60;
@@ -75,15 +75,19 @@ export const TimeMachine = () => {
     
     const language = useContext( LanguageContext );  
     const langJSON = useContext( LanguageData );
+    const timerSetup = useContext( TimerSet );
     
     const [run, setRun] = useState( false ); //stopper
     const [deadline, setDeadline ] = useState(); //deadline
     const [advanced, setAdvanced] = useState( false ); //use advanced setup
     const [ status, setStatus ] = useState( 'closed' ); //modal
     
-    console.log( 'lang:', language );
+    const timerDate = new Date( timerSetup );
     
-    useEffect( () => { setDeadline( initalDeadline ); }, [] );    
+    useEffect( () => { 
+        setDeadline( timerSetup === null ? initalDeadline : timerSetup ); 
+        setRun( timerSetup === null ? false : true );
+    }, [] ); 
     
     const closeHandler = () => setStatus( 'closed' );
     
@@ -189,7 +193,7 @@ export const TimeMachine = () => {
             <>
                 <div className="flex flex-col justify-center">
                     <div className={ "flex gap-2 mb-4 w-full text-xs md:text-sm lg:text-base justify-center " + ( run === true ? ' md:justify-center' : ' md:justify-end') }>
-                        { run === false &&
+                        { run === false && timerSetup === null &&
                             <div className="quicksetup hidden md:flex gap-2">
                                 <TimeSetButton intervall={ 30 }/>
                                 <TimeSetButton intervall={ 15 }/>
@@ -199,9 +203,9 @@ export const TimeMachine = () => {
                             </div> 
                         }
                         <div className="border-2 border-tdgreen-400 p-1 rounded">
-                            { fullformattedDate( deadline || '' ) }<ClockIcon rotate={ run === true ? true : false } className="inline pb-0.5 " />
+                            { timerSetup === null ? fullformattedDate( deadline || '' ) : fullformattedDate( timerDate ) }<ClockIcon rotate={ run === true ? true : false } className="inline pb-0.5 " />
                         </div>
-                        { run === false &&
+                        { run === false && timerSetup === null &&
                             <div className="fullsetup flex gap-2">
                                 <button 
                                     onClick={ () => setAdvanced(advanced === true ? false : true) }
@@ -219,29 +223,33 @@ export const TimeMachine = () => {
                     </div> 
                     { run ? <Timer deadline={ deadline || initalDeadline } run={ run } timeupHandler={ timeUp } language={{ lang: language.language, data: langJSON }} /> : 
                             <div className="digit text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-bold text-center mt-2">{ resolveLangStr( 'stopped', langJSON, language.language ) }</div> }
-                    <div className="self-center flex gap-2 mt-2">
-                        <button 
-                            className="mt-2 border bg-tdgreen-400 border-tdgreen-400 text-white pb-2 pt-3 ps-3 pe-3 rounded hover:bg-tdgreen-300 hover:border-tdgreen-300"
-                            onClick={ () => ( setRun(run ? false : true), setAdvanced( false ) ) } >
-                            { !run ? resolveLangStr( 'start', langJSON, language.language ) : resolveLangStr( 'stop', langJSON, language.language ) }
-                        </button>
-                        { run === false && 
-                            <>
-                                <button 
-                                    onClick={ () => setStatus( 'open' ) }
-                                    className="mt-2 border bg-tgreen border-tgreen text-white pb-2 pt-2 ps-3 pe-3 rounded hover:bg-tdgreen-300 hover:border-tdgreen-300">
-                                    <Share className="fill-white"/>
-                                </button>   
-                            </>
-                        }
-                    </div>
+                    { timerSetup === null &&
+                        <div className="self-center flex gap-2 mt-2">
+                            <button 
+                                className="mt-2 border bg-tdgreen-400 border-tdgreen-400 text-white pb-2 pt-3 ps-3 pe-3 rounded hover:bg-tdgreen-300 hover:border-tdgreen-300"
+                                onClick={ () => ( setRun(run ? false : true), setAdvanced( false ) ) } >
+                                    { !run ? resolveLangStr( 'start', langJSON, language.language ) : resolveLangStr( 'stop', langJSON, language.language ) }
+                            </button>
+                            { run === false &&
+                                <>
+                                    <button 
+                                        onClick={ () => setStatus( 'open' ) }
+                                        className="mt-2 border bg-tgreen border-tgreen text-white pb-2 pt-2 ps-3 pe-3 rounded hover:bg-tdgreen-300 hover:border-tdgreen-300">
+                                        <Share className="fill-white"/>
+                                    </button>   
+                                </>
+                            }
+                        </div>
+                    }
                 </div>
-                <ShareModal 
-                    status={ status } 
-                    lang={{ set: language.language, data: langJSON }} 
-                    handler={ closeHandler } 
-                    sharetimer={ deadline || initalDeadline } 
-                />
+                { timerSetup === null &&
+                    <ShareModal 
+                        status={ status } 
+                        lang={{ set: language.language, data: langJSON }} 
+                        handler={ closeHandler } 
+                        sharetimer={ deadline || initalDeadline } 
+                    />
+                }
             </>
     );
 };

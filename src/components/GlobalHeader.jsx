@@ -26,7 +26,11 @@ export default function GlobalHeader({ mode = 'full' }) {
         
     return (
                 <header className="flex justify-between p-4 opacity-10 hover:opacity-100 transition-opacity duration-500">
-                    <div className={ mode === 'full' ? 'ps-1' : 'ps-4' }><Logo size="small" width={ mode === 'full' ? '120px' : '80px' }/></div>
+                    <div className={ mode === 'full' ? 'ps-1' : 'ps-4' }>
+                        <a href="https://tsu-nami.de/" target="_blank" rel="noreferrer noopener">
+                            <Logo size="small" width={ mode === 'full' ? '120px' : '80px' }/>
+                        </a>
+                    </div>
                     { mode === 'full' ? <div><LanguageSwitch /></div> : '' }
                 </header>
         );
